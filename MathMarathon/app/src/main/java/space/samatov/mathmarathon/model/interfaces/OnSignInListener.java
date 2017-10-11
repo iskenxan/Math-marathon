@@ -5,5 +5,5 @@ package space.samatov.mathmarathon.model.interfaces;
  */
 
 public interface OnSignInListener {
-    void onGoogleSignInResult(boolean result);
+    void onGoogleFirebaseSignInResult(boolean result);
 }

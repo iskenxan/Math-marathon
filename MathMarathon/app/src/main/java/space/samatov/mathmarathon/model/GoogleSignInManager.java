@@ -2,7 +2,6 @@ package space.samatov.mathmarathon.model;
 
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
@@ -16,10 +15,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-import space.samatov.mathmarathon.R;
 import space.samatov.mathmarathon.model.interfaces.OnSignInListener;
 
 
@@ -64,9 +61,9 @@ public class GoogleSignInManager implements  GoogleApiClient.OnConnectionFailedL
     @Override
     public void onComplete(@NonNull Task<AuthResult> task) {
         if (task.isSuccessful())
-            mListener.onGoogleSignInResult(true);
+            mListener.onGoogleFirebaseSignInResult(true);
         else
-            mListener.onGoogleSignInResult(false);
+            mListener.onGoogleFirebaseSignInResult(false);
     }
 
 
