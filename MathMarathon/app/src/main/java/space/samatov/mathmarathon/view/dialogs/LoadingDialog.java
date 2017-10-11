@@ -31,7 +31,6 @@ public class LoadingDialog extends DialogFragment {
 
 
 
-
     public static LoadingDialog newInstance() {
         LoadingDialog loadingDialog=new LoadingDialog();
 

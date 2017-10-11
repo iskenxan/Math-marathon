@@ -24,6 +24,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import space.samatov.mathmarathon.R;
+import space.samatov.mathmarathon.model.FirebaseManager;
 import space.samatov.mathmarathon.model.GoogleSignInManager;
 import space.samatov.mathmarathon.model.interfaces.OnSignInListener;
 import space.samatov.mathmarathon.model.utils.AnimationFactory;
@@ -93,8 +94,10 @@ public class WelcomeFragment extends Fragment implements OnSignInListener {
     @Override
     public void onGoogleFirebaseSignInResult(boolean result) {
         mLoadingDialog.dismiss();
-        if(result)
+        if(result){
+            FirebaseManager.createNewUserRecord();
             FragmentFactory.startMenuFragment((AppCompatActivity) getActivity());
+        }
         else
             Toast.makeText(getContext(),"Signing in your google account failed! Try again later",Toast.LENGTH_LONG).show();
     }

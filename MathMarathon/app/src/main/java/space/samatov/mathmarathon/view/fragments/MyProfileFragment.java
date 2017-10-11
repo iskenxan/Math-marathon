@@ -40,8 +40,8 @@ public class MyProfileFragment extends Fragment {
         return view;
     }
 
-    //TODO:Create a dabase object for every new registered user
-    //Add ability to save photos on the database storage after compressing them
+    //TODO:Use formatted user email as a key instead of UID(to make sending friend requests easier)
+    //TODO:Add ability to save photos on the database storage after compressing them
 
     private void populateViews(){
         mNameTextView.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
