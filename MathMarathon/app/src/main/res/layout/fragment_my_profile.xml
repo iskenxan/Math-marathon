@@ -32,10 +32,22 @@
                     android:layout_width="140dp"
                     android:layout_height="140dp"
                     android:scaleType="centerCrop"
+                    android:visibility="invisible"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
                     android:id="@+id/MyProfileImageView"
                     android:src="@drawable/profile_placeholder" />
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginBottom="30dp"
+                    android:visibility="invisible"
+                    android:id="@+id/ProfileImagePlaceHolder"
+                    android:background="@color/darkNavyColor"
+                    android:layout_alignStart="@id/MyProfileImageView"
+                    android:layout_alignBottom="@id/MyProfileImageView"
+                    android:src="@drawable/sand_clock_white"/>
                 <Button
                     android:layout_width="135dp"
                     android:layout_height="30dp"

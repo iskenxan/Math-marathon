@@ -82,7 +82,8 @@ public class WelcomeFragment extends Fragment implements OnSignInListener, OnExt
         if(requestCode==IntentFactory.GOOGLE_SIGN_IN_INTENT){
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             mGoogleSignInManager.handleSignInResult(result);
-            mLoadingDialog=LoadingDialog.displayDialog(getFragmentManager());
+            if(result.isSuccess())
+                mLoadingDialog=LoadingDialog.displayDialog(getFragmentManager());
         }
     }
 
@@ -107,7 +108,9 @@ public class WelcomeFragment extends Fragment implements OnSignInListener, OnExt
 
 
     private void displayFailedToast(){
-        Toast.makeText(getContext(),"Signing in your google account failed! Try again later",Toast.LENGTH_LONG).show();
+        if(mLoadingDialog!=null)
+            mLoadingDialog.dismiss();
+        Toast.makeText(getContext(),"Signing in your google account failed! Please try again.",Toast.LENGTH_SHORT).show();
     }
 
 }

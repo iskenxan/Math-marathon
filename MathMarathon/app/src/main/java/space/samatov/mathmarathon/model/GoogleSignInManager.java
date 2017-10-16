@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import space.samatov.mathmarathon.model.interfaces.OnSignInListener;
+import space.samatov.mathmarathon.view.dialogs.LoadingDialog;
 
 
 /**
@@ -51,9 +52,10 @@ public class GoogleSignInManager implements  GoogleApiClient.OnConnectionFailedL
             GoogleSignInAccount acct = result.getSignInAccount();
             AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
             mAuth.signInWithCredential(credential).addOnCompleteListener(mActivity, this);
+
         }
         else
-            Toast.makeText(mActivity,"Failed signing in!",Toast.LENGTH_LONG).show();
+            mListener.onGoogleFirebaseSignInResult(false);
     }
 
 

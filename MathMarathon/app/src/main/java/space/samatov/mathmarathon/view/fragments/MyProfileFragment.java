@@ -14,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -24,25 +26,28 @@ import space.samatov.mathmarathon.model.FirebaseManager;
 import space.samatov.mathmarathon.model.User;
 import space.samatov.mathmarathon.model.interfaces.OnExtracUserListener;
 import space.samatov.mathmarathon.model.interfaces.OnImageUploadListener;
+import space.samatov.mathmarathon.model.utils.AnimationFactory;
+import space.samatov.mathmarathon.model.utils.Formatter;
 import space.samatov.mathmarathon.model.utils.FragmentFactory;
 import space.samatov.mathmarathon.model.utils.IntentFactory;
 import space.samatov.mathmarathon.view.dialogs.LoadingDialog;
 
 import static android.app.Activity.RESULT_OK;
+import static android.view.View.GONE;
 
 /**
  * Created by iskenxan on 10/11/17.
  */
 
-public class MyProfileFragment extends Fragment implements OnExtracUserListener, OnImageUploadListener {
+public class MyProfileFragment extends Fragment implements OnExtracUserListener, OnImageUploadListener, Callback {
 
-    //TODO:Add placeholder for when images load for too long
-    //TODO:if user clicks back button while loggin in dialog is displayed the loading dialog is still displayed and doesnt dissapear
+
     @BindView(R.id.MyProfileImageView)ImageView mProfileImageView;
     @BindView(R.id.MyProfileName)TextView mUsername;
     @BindView(R.id.MyProfileOverallScore)TextView mOverallScoreTextView;
     @BindView(R.id.MyProfileWins)TextView mWinsTextView;
     @BindView(R.id.MyProfileLoses)TextView mLosesTextView;
+    @BindView(R.id.ProfileImagePlaceHolder)ImageView mProfilePlaceHolder;
     LoadingDialog mLoadingDialog;
     User mUser;
 
@@ -53,9 +58,11 @@ public class MyProfileFragment extends Fragment implements OnExtracUserListener,
         ButterKnife.bind(this,view);
         FirebaseManager.extracUserData(this);
         mLoadingDialog=LoadingDialog.displayDialog(getFragmentManager());
-
+        AnimationFactory.startRotatingAnimation(mProfilePlaceHolder);
         return view;
     }
+
+
 
     @Override
     public void onUserDataExtracted(User user) {
@@ -69,12 +76,35 @@ public class MyProfileFragment extends Fragment implements OnExtracUserListener,
 
 
     private void populateViews(){
-        if(mUser.getPhotoUrl()!=null)
-            Picasso.with(getContext()).load(mUser.getPhotoUrl()).into(mProfileImageView);
-        mUsername.setText(mUser.getEmail());
+        loadPicture();
+        String username= Formatter.formatEmailForFirebase(mUser.getEmail());
+        mUsername.setText(username);
         mOverallScoreTextView.setText(mUser.getOverallScore()+"");
         mWinsTextView.setText(mUser.getWins()+"");
         mLosesTextView.setText(mUser.getLoses()+"");
+    }
+
+
+    private void loadPicture(){
+        mProfileImageView.setVisibility(View.VISIBLE);
+        if(mUser.getPhotoUrl()!=null){
+            Picasso.with(getContext()).load(mUser.getPhotoUrl()).placeholder(R.color.darkNavyColor).
+                    memoryPolicy(MemoryPolicy.NO_CACHE).into(mProfileImageView,this);
+            mProfilePlaceHolder.setVisibility(View.VISIBLE);
+        }
+        else
+            mProfilePlaceHolder.setVisibility(GONE);
+    }
+
+
+    @Override
+    public void onSuccess() {
+        mProfilePlaceHolder.setVisibility(GONE);
+    }
+
+    @Override
+    public void onError() {
+        mProfilePlaceHolder.setVisibility(GONE);
     }
 
 
@@ -133,8 +163,10 @@ public class MyProfileFragment extends Fragment implements OnExtracUserListener,
     private void saveImageUrlAndDisplay(Uri uri){
         mUser.setPhotoUrl(uri.toString());
         FirebaseManager.updateProfileImageUrl(mUser);
-        Picasso.with(getContext()).load(uri).into(mProfileImageView);
+        mProfilePlaceHolder.setVisibility(View.VISIBLE);
+        Picasso.with(getContext()).load(uri).placeholder(R.color.darkNavyColor).into(mProfileImageView,this);
 
     }
+
 
 }

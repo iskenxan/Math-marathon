@@ -13,12 +13,11 @@ public class Formatter {
 
 
     public static String formatEmailForFirebase(String email){
-        String formatted=email;
-        formatted=formatted.replaceAll("\\.","_");
+        String formatted=email.split("@")[0];
+        formatted=formatted.replaceAll("\\.","");
 
         return formatted;
     }
-
 
 
     public static byte[] convertBitmapToBytes(Bitmap bitmap){
