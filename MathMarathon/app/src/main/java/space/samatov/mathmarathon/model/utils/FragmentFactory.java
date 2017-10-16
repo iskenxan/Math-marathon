@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
 import space.samatov.mathmarathon.R;
+import space.samatov.mathmarathon.view.fragments.FriendRequestFragment;
 import space.samatov.mathmarathon.view.fragments.MenuFragment;
 import space.samatov.mathmarathon.view.fragments.MyProfileFragment;
 import space.samatov.mathmarathon.view.fragments.WelcomeFragment;
@@ -32,6 +33,12 @@ public class FragmentFactory {
     public static final void startMyProfileFragment(AppCompatActivity activity){
         MyProfileFragment myProfileFragment=new MyProfileFragment();
         startMainActivityFragment(activity,myProfileFragment);
+    }
+
+
+    public static final void startFriendRequestFragment(AppCompatActivity activity){
+        FriendRequestFragment fragment=new FriendRequestFragment();
+        startMainActivityFragment(activity,fragment);
     }
 
 

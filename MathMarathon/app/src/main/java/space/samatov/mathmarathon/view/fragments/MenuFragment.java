@@ -43,7 +43,7 @@ public class MenuFragment extends Fragment {
 
     @OnClick(R.id.MenuFragmentFriendButton)
     public void onFriendRequestsButtonClicked(){
-
+        mHandler.postDelayed(friendRequestRunnable,300);
     }
 
 
@@ -58,6 +58,14 @@ public class MenuFragment extends Fragment {
         @Override
         public void run() {
             FragmentFactory.startMyProfileFragment((AppCompatActivity) getActivity());
+        }
+    };
+
+
+    Runnable friendRequestRunnable= new Runnable() {
+        @Override
+        public void run() {
+            FragmentFactory.startFriendRequestFragment((AppCompatActivity) getActivity());
         }
     };
 
