@@ -1,5 +1,7 @@
 package space.samatov.mathmarathon.model;
 
+import java.util.ArrayList;
+
 /**
  * Created by iskenxan on 10/11/17.
  */
@@ -13,7 +15,25 @@ public class User {
     private int overallScore=0;
     private int Wins=0;
     private int loses=0;
+    private ArrayList<UserReference> friendRequests=new ArrayList<>();
+    private ArrayList<UserReference> friendList=new ArrayList<>();
 
+
+    public ArrayList<UserReference> getFriendList() {
+        return friendList;
+    }
+
+    public void setFriendList(ArrayList<UserReference> friendList) {
+        this.friendList = friendList;
+    }
+
+    public ArrayList<UserReference> getFriendRequests() {
+        return friendRequests;
+    }
+
+    public void setFriendRequests(ArrayList<UserReference> friendRequests) {
+        this.friendRequests = friendRequests;
+    }
 
     public String getUID() {
         return UID;

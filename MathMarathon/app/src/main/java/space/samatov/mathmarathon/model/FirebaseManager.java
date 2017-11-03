@@ -23,11 +23,16 @@ public class FirebaseManager {
     public static final String PROFILE_IMAGES="profile_images";
 
 
-    public static void extracUserData(OnExtracUserListener listener){
-        DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference();
-        String formattedEmail= Formatter.formatEmailForFirebase(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+    public static void extracCurrentUserData(OnExtracUserListener listener){
+        String formattedEmail= Formatter.formatStringForFirebase(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+        extractUserData(listener,formattedEmail);
+    }
 
-        databaseReference.child(USERS).child(formattedEmail).
+
+
+    public static void extractUserData(OnExtracUserListener listener,String username){
+        DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference();
+        databaseReference.child(USERS).child(username).
                 addListenerForSingleValueEvent(new FirebaseCallbacks.ExtractUserCallback(listener));
     }
 
@@ -35,11 +40,17 @@ public class FirebaseManager {
 
     public static void createNewUserRecord(){
         User user=getNewUserBasicInfo();
-        DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference();
-        String formattedEmail= Formatter.formatEmailForFirebase(user.getEmail());
-
-        databaseReference.child(USERS).child(formattedEmail).setValue(user);
+        String formattedEmail= Formatter.formatStringForFirebase(user.getEmail());
+        setUserRecord(user,formattedEmail);
     }
+
+
+
+    public static void setUserRecord(User user,String username){
+        DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference();
+        databaseReference.child(USERS).child(username).setValue(user);
+    }
+
 
 
     private static User getNewUserBasicInfo(){
@@ -55,7 +66,7 @@ public class FirebaseManager {
 
 
     public static void updateProfileImageUrl(User user){
-        String username=Formatter.formatEmailForFirebase(user.getEmail());
+        String username=Formatter.formatStringForFirebase(user.getEmail());
 
         DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference();
         databaseReference.child(USERS).child(username).child("photoUrl").setValue(user.getPhotoUrl());
@@ -75,7 +86,7 @@ public class FirebaseManager {
 
     private static StorageReference getProfileImageStorageRef(User user){
         StorageReference mountainImagesRef = FirebaseStorage.getInstance().getReference();
-        String userName=Formatter.formatEmailForFirebase(user.getEmail());
+        String userName=Formatter.formatStringForFirebase(user.getEmail());
         mountainImagesRef= mountainImagesRef.child(PROFILE_IMAGES+"/"+userName+".jpg");
 
         return mountainImagesRef;

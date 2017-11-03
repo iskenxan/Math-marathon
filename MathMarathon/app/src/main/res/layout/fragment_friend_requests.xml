@@ -24,7 +24,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1">
+                android:layout_weight="2">
 
                 <ImageView
                     android:layout_width="100dp"
@@ -38,57 +38,70 @@
                     android:layout_width="100dp"
                     android:src="@drawable/profile_placeholder"
                     android:layout_height="100dp"
+                    android:scaleType="centerCrop"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true" />
             </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="3">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:visibility="invisible"
+                    android:id="@+id/FriendRequestsRecyclerContainer"
+                    android:padding="10dp">
 
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="5">
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/FriendRequestsRecyclerView"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                    </RelativeLayout>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:gravity="center"
+                    android:id="@+id/FriendRequestsNoRequestsContainer"
+                    android:orientation="vertical"
+                    android:visibility="invisible"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textSize="25sp"
+                        android:textColor="@color/darkNavyColor"
+                        android:text="No new friend requests"/>
+                    <ImageView
+                        android:layout_width="100dp"
+                        android:layout_marginTop="40dp"
+                        android:layout_height="100dp"
+                        android:src="@drawable/sad_face"/>
+                </LinearLayout>
+            </RelativeLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="2"
-                android:orientation="vertical"
-                android:padding="10dp">
+                android:layout_weight="0.7"
+                android:gravity="center">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="5">
-
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/FriendRequestsRecyclerView"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-
-                    <TextView
-                        android:id="@+id/FriendRequestsNoRequestsTextView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
-                        android:gravity="center"
-                        android:text="No new friend requests"
-                        android:textColor="@color/darkNavyColor"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
-                        android:visibility="invisible" />
-                </RelativeLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center">
-
-                    <Button
-                        android:id="@+id/FriendRequestsSendButton"
-                        android:layout_width="140dp"
-                        android:layout_height="35dp"
-                        android:background="@drawable/red_button_ripple_effect"
-                        android:text="send request"
-                        android:textColor="@android:color/white"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
+                <Button
+                    android:id="@+id/FriendRequestsSendButton"
+                    android:layout_width="140dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/red_button_ripple_effect"
+                    android:text="send request"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
 

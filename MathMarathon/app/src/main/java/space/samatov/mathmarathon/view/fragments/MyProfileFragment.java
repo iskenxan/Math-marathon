@@ -23,6 +23,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import space.samatov.mathmarathon.R;
 import space.samatov.mathmarathon.model.FirebaseManager;
+import space.samatov.mathmarathon.model.MySharedPreferenceManager;
 import space.samatov.mathmarathon.model.User;
 import space.samatov.mathmarathon.model.interfaces.OnExtracUserListener;
 import space.samatov.mathmarathon.model.interfaces.OnImageUploadListener;
@@ -56,7 +57,7 @@ public class MyProfileFragment extends Fragment implements OnExtracUserListener,
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.fragment_my_profile,container,false);
         ButterKnife.bind(this,view);
-        FirebaseManager.extracUserData(this);
+        FirebaseManager.extracCurrentUserData(this);
         mLoadingDialog=LoadingDialog.displayDialog(getFragmentManager());
         AnimationFactory.startRotatingAnimation(mProfilePlaceHolder);
         return view;
@@ -77,7 +78,7 @@ public class MyProfileFragment extends Fragment implements OnExtracUserListener,
 
     private void populateViews(){
         loadPicture();
-        String username= Formatter.formatEmailForFirebase(mUser.getEmail());
+        String username= Formatter.formatStringForFirebase(mUser.getEmail());
         mUsername.setText(username);
         mOverallScoreTextView.setText(mUser.getOverallScore()+"");
         mWinsTextView.setText(mUser.getWins()+"");
@@ -161,11 +162,10 @@ public class MyProfileFragment extends Fragment implements OnExtracUserListener,
 
 
     private void saveImageUrlAndDisplay(Uri uri){
-        mUser.setPhotoUrl(uri.toString());
+        MySharedPreferenceManager.saveString(MySharedPreferenceManager.PROFILE_PHOTO_URL,uri.toString(),getContext());
         FirebaseManager.updateProfileImageUrl(mUser);
         mProfilePlaceHolder.setVisibility(View.VISIBLE);
         Picasso.with(getContext()).load(uri).placeholder(R.color.darkNavyColor).into(mProfileImageView,this);
-
     }
 
 

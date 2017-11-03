@@ -21,6 +21,7 @@ import butterknife.OnClick;
 import space.samatov.mathmarathon.R;
 import space.samatov.mathmarathon.model.FirebaseManager;
 import space.samatov.mathmarathon.model.GoogleSignInManager;
+import space.samatov.mathmarathon.model.MySharedPreferenceManager;
 import space.samatov.mathmarathon.model.User;
 import space.samatov.mathmarathon.model.interfaces.OnExtracUserListener;
 import space.samatov.mathmarathon.model.interfaces.OnSignInListener;
@@ -91,7 +92,7 @@ public class WelcomeFragment extends Fragment implements OnSignInListener, OnExt
     @Override
     public void onGoogleFirebaseSignInResult(boolean result) {
         if(result)
-            FirebaseManager.extracUserData(this);
+            FirebaseManager.extracCurrentUserData(this);
         else
            displayFailedToast();
     }
@@ -101,9 +102,19 @@ public class WelcomeFragment extends Fragment implements OnSignInListener, OnExt
     @Override
     public void onUserDataExtracted(User user) {
         mLoadingDialog.dismiss();
+        saveUserDataOrCreateNewUser(user);
+
+        FragmentFactory.startMenuFragment((AppCompatActivity) getActivity());
+    }
+
+
+
+    private void saveUserDataOrCreateNewUser(User user){
         if(user==null)
             FirebaseManager.createNewUserRecord();
-        FragmentFactory.startMenuFragment((AppCompatActivity) getActivity());
+        else
+            MySharedPreferenceManager.saveString(MySharedPreferenceManager.PROFILE_PHOTO_URL,
+                    user.getPhotoUrl(),getContext());
     }
 
 

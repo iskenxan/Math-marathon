@@ -1,9 +1,15 @@
 package space.samatov.mathmarathon.model.utils;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.io.ByteArrayOutputStream;
-import java.nio.ByteBuffer;
+import java.util.ArrayList;
+
+import space.samatov.mathmarathon.model.MySharedPreferenceManager;
+import space.samatov.mathmarathon.model.UserReference;
 
 /**
  * Created by iskenxan on 10/11/17.
@@ -12,8 +18,36 @@ import java.nio.ByteBuffer;
 public class Formatter {
 
 
-    public static String formatEmailForFirebase(String email){
-        String formatted=email.split("@")[0];
+
+    public static UserReference getCurrentUserRequest(Context context){
+        UserReference currentFriendRequest =new UserReference();
+        currentFriendRequest.setUsername(Formatter.getCurrentUsername());
+        currentFriendRequest.setPhotoUrl(MySharedPreferenceManager.getString(MySharedPreferenceManager.PROFILE_PHOTO_URL,context));
+
+        return currentFriendRequest;
+    }
+
+
+
+    public static String getCurrentUsername(){
+        String currentEmail= FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        String currentUsername= formatStringForFirebase(currentEmail);
+
+        return currentUsername;
+    }
+
+
+    public static boolean listContainsUserRequest(ArrayList<UserReference> userList, UserReference user){
+        for(UserReference listItem:userList){
+            if(listItem.getUsername().equals(user.getUsername()))
+                return true;
+        }
+        return false;
+    }
+
+
+    public static String formatStringForFirebase(String str){
+        String formatted=str.split("@")[0];
         formatted=formatted.replaceAll("\\.","");
 
         return formatted;
