@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.text.Format;
 import java.util.ArrayList;
 
 import space.samatov.mathmarathon.R;
@@ -53,7 +54,6 @@ public class SendFriendRequestDialog extends DialogFragment implements View.OnCl
 
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.friend_request_dialog, container);
@@ -63,13 +63,24 @@ public class SendFriendRequestDialog extends DialogFragment implements View.OnCl
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        bindViews(view);
+        setListeners();
+    }
+
+
+    private void bindViews(View view){
         mUsernameEditText = view.findViewById(R.id.FriendDialogUsernameEdiText);
         mLoadingImageView = view.findViewById(R.id.FriendDialogLoadingImageView);
         mSendButton = view.findViewById(R.id.FriendDialogSendButton);
         mCancelButton = view.findViewById(R.id.FriendDialogCancellButton);
+    }
+
+
+    private void setListeners(){
         mSendButton.setOnClickListener(this);
         mCancelButton.setOnClickListener(this);
     }
+
 
 
     @Override
@@ -112,6 +123,8 @@ public class SendFriendRequestDialog extends DialogFragment implements View.OnCl
         AnimationFactory.startRotatingAnimation(mLoadingImageView);
     }
 
+
+
     @Override
     public void onUserDataExtracted(User user) {
         if(user!=null){
@@ -120,7 +133,6 @@ public class SendFriendRequestDialog extends DialogFragment implements View.OnCl
         else{
             displayErrorMessage("User doesn't exist");
         }
-
     }
     
 
@@ -134,17 +146,26 @@ public class SendFriendRequestDialog extends DialogFragment implements View.OnCl
 
 
     private void sendFriendRequestToUser(User user){
-        ArrayList<UserReference> friendRequests=user.getFriendRequests();
-        UserReference currentFriendRequest =Formatter.getCurrentUserRequest(getContext());
-        if(!Formatter.listContainsUserRequest(friendRequests, currentFriendRequest)){
-            friendRequests.add(currentFriendRequest);
-            FirebaseManager.setUserRecord(user,Formatter.formatStringForFirebase(user.getEmail()));
-            onFriendRequestSent();
+        String currentUsername= Formatter.getCurrentUsername();
+        if(!friendRequestWasSent(user,currentUsername)){
+            addRequestAndUpdateUser(currentUsername,user);
         }
         else{
             displayErrorMessage("Friend request has already been sent!");
         }
+    }
 
+
+
+    private void addRequestAndUpdateUser(String currentUsername,User user){
+        user.getFriendRequests().add(currentUsername);
+        FirebaseManager.setUserRecord(user,Formatter.formatStringForFirebase(user.getEmail()));
+        onFriendRequestSent();
+    }
+
+
+    private boolean friendRequestWasSent(User user,String username){
+        return user.getFriendRequests().contains(username)||user.getFriendList().contains(username);
     }
 
 
@@ -158,6 +179,4 @@ public class SendFriendRequestDialog extends DialogFragment implements View.OnCl
         Toast.makeText(getContext(),message,Toast.LENGTH_SHORT).show();
         mLoadingImageView.setVisibility(View.INVISIBLE);
     }
-
-
 }

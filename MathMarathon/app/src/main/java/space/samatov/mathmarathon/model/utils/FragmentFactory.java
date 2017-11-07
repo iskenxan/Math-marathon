@@ -9,6 +9,7 @@ import space.samatov.mathmarathon.R;
 import space.samatov.mathmarathon.view.fragments.FriendRequestFragment;
 import space.samatov.mathmarathon.view.fragments.MenuFragment;
 import space.samatov.mathmarathon.view.fragments.MyProfileFragment;
+import space.samatov.mathmarathon.view.fragments.StartGameFragment;
 import space.samatov.mathmarathon.view.fragments.WelcomeFragment;
 
 /**
@@ -38,6 +39,11 @@ public class FragmentFactory {
 
     public static final void startFriendRequestFragment(AppCompatActivity activity){
         FriendRequestFragment fragment=new FriendRequestFragment();
+        startMainActivityFragment(activity,fragment);
+    }
+
+    public static final void startStartGameFragment(AppCompatActivity activity){
+        StartGameFragment fragment=new StartGameFragment();
         startMainActivityFragment(activity,fragment);
     }
 

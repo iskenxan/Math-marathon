@@ -12,7 +12,9 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import space.samatov.mathmarathon.R;
-import space.samatov.mathmarathon.model.UserReference;
+import space.samatov.mathmarathon.model.FirebaseManager;
+import space.samatov.mathmarathon.model.User;
+import space.samatov.mathmarathon.model.interfaces.OnExtracUserListener;
 import space.samatov.mathmarathon.model.interfaces.OnUserRequestItemClickedListener;
 
 /**
@@ -20,11 +22,11 @@ import space.samatov.mathmarathon.model.interfaces.OnUserRequestItemClickedListe
  */
 
 public class FriendRequestListAdapter extends RecyclerView.Adapter {
-    private ArrayList<UserReference> mFriendRequests;
+    private ArrayList<String> mFriendRequests;
     private OnUserRequestItemClickedListener mItemClickedListener;
 
 
-    public FriendRequestListAdapter (ArrayList<UserReference> friendRequests, OnUserRequestItemClickedListener listener){
+    public FriendRequestListAdapter (ArrayList<String> friendRequests, OnUserRequestItemClickedListener listener){
         mFriendRequests = friendRequests;
         mItemClickedListener=listener;
     }
@@ -50,7 +52,7 @@ public class FriendRequestListAdapter extends RecyclerView.Adapter {
 
 
 
-    private class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, OnExtracUserListener {
         ImageView mProfileImageView;
         TextView mUsernameTextView;
         TextView mAcceptTextView;
@@ -69,11 +71,17 @@ public class FriendRequestListAdapter extends RecyclerView.Adapter {
 
         private void bind(int position){
             mPosition=position;
-            UserReference request = mFriendRequests.get(position);
-            Picasso.with(mProfileImageView.getContext()).load(request.getPhotoUrl()).placeholder(R.drawable.profile_placeholder).into(mProfileImageView);
-            mUsernameTextView.setText(request.getUsername());
+            String username = mFriendRequests.get(position);
+            mUsernameTextView.setText(username);
             mAcceptTextView.setOnClickListener(this);
             mDeclineTextView.setOnClickListener(this);
+            FirebaseManager.extractUserData(this,username);
+        }
+
+        @Override
+        public void onUserDataExtracted(User user) {
+            Picasso.with(mProfileImageView.getContext()).load(user.getPhotoUrl())
+                    .placeholder(R.drawable.profile_placeholder).into(mProfileImageView);
         }
 
 
@@ -84,7 +92,6 @@ public class FriendRequestListAdapter extends RecyclerView.Adapter {
             else
                 mItemClickedListener.onRequestItemClicked(false,mPosition);
         }
-
 
     }
 

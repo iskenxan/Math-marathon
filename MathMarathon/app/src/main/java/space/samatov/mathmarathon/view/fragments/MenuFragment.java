@@ -37,7 +37,7 @@ public class MenuFragment extends Fragment {
 
     @OnClick(R.id.MenuFragmentStartButton)
     public void onStartButtonClicked(){
-
+        mHandler.postDelayed(starGameRunnable,300);
     }
 
 
@@ -66,6 +66,14 @@ public class MenuFragment extends Fragment {
         @Override
         public void run() {
             FragmentFactory.startFriendRequestFragment((AppCompatActivity) getActivity());
+        }
+    };
+
+
+    Runnable starGameRunnable=new Runnable() {
+        @Override
+        public void run() {
+            FragmentFactory.startStartGameFragment((AppCompatActivity) getActivity());
         }
     };
 

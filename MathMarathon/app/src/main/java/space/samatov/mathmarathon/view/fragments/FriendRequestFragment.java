@@ -44,8 +44,6 @@ public class FriendRequestFragment extends Fragment implements OnExtracUserListe
     @BindView(R.id.FriendRequestsNoRequestsContainer)LinearLayout mNorequestsContainer;
 
     User mCurrentUser;
-    //TODO:When sending friend request check both the friend request list and friend list for duplicates
-    //TODO: Probably  should not store photo url in the friend list. What if user's friend updates his photo?
 
     @Nullable
     @Override
@@ -89,7 +87,7 @@ public class FriendRequestFragment extends Fragment implements OnExtracUserListe
 
     private void acceptOrRejectFriendRequest(boolean accepted, int position){
         if(accepted){
-            UserReference friendRequest=mCurrentUser.getFriendRequests().get(position);
+            String friendRequest=mCurrentUser.getFriendRequests().get(position);
             mCurrentUser.getFriendList().add(friendRequest);
         }
         mCurrentUser.getFriendRequests().remove(position);

@@ -15,23 +15,41 @@ public class User {
     private int overallScore=0;
     private int Wins=0;
     private int loses=0;
-    private ArrayList<UserReference> friendRequests=new ArrayList<>();
-    private ArrayList<UserReference> friendList=new ArrayList<>();
+    private ArrayList<String> friendRequests=new ArrayList<>();
+    private ArrayList<String> friendList=new ArrayList<>();
+    private boolean inGame=false;
+    private boolean inLoading=false;
 
 
-    public ArrayList<UserReference> getFriendList() {
+    public boolean isInLoading() {
+        return inLoading;
+    }
+
+    public void setInLoading(boolean inLoading) {
+        this.inLoading = inLoading;
+    }
+
+    public boolean isInGame() {
+        return inGame;
+    }
+
+    public void setInGame(boolean inGame) {
+        this.inGame = inGame;
+    }
+
+    public ArrayList<String> getFriendList() {
         return friendList;
     }
 
-    public void setFriendList(ArrayList<UserReference> friendList) {
+    public void setFriendList(ArrayList<String> friendList) {
         this.friendList = friendList;
     }
 
-    public ArrayList<UserReference> getFriendRequests() {
+    public ArrayList<String> getFriendRequests() {
         return friendRequests;
     }
 
-    public void setFriendRequests(ArrayList<UserReference> friendRequests) {
+    public void setFriendRequests(ArrayList<String> friendRequests) {
         this.friendRequests = friendRequests;
     }
 
