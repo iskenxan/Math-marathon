@@ -70,7 +70,8 @@ public class StartGameFragment extends Fragment implements OnExtracUserListener,
 
     @Override
     public void onStartGameItemClicked(int position) {
-
+        String username=mCurrentUser.getFriendList().get(position);
+        FragmentFactory.startLoadingGameFragment((AppCompatActivity) getActivity(),username);
     }
 
 

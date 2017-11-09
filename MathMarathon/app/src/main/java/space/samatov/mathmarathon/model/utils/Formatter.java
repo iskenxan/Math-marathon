@@ -19,6 +19,29 @@ public class Formatter {
 
 
 
+    public static String convertSignToStr(int sign){
+        String signStr="";
+
+        switch (sign){
+            case 0:{
+                signStr="+";
+                break;
+            }
+            case 1:{
+                signStr="-";
+                break;
+            }
+            case 2:{
+                signStr="*";
+                break;
+            }
+        }
+
+        return signStr;
+    }
+
+
+
     public static UserReference getCurrentUserRequest(Context context){
         UserReference currentFriendRequest =new UserReference();
         currentFriendRequest.setUsername(Formatter.getCurrentUsername());

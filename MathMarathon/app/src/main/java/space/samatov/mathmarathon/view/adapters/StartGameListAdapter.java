@@ -56,12 +56,14 @@ public class StartGameListAdapter extends RecyclerView.Adapter {
         TextView mPlayTextView;
         int mPosition;
 
+
         public ViewHolder(View itemView) {
             super(itemView);
             mProfileImageView=itemView.findViewById(R.id.StartGameItemProfileImageView);
             mUsernameTextView=itemView.findViewById(R.id.StartGameItemUsername);
             mPlayTextView=itemView.findViewById(R.id.StartGamePlayTextView);
         }
+
 
         private void bind(int position){
             mPosition=position;
@@ -71,6 +73,7 @@ public class StartGameListAdapter extends RecyclerView.Adapter {
             mPlayTextView.setOnClickListener(this);
         }
 
+
         @Override
         public void onUserDataExtracted(User user) {
             Picasso.with(mProfileImageView.getContext()).load(user.getPhotoUrl()).placeholder(R.drawable.profile_placeholder).into(mProfileImageView);
@@ -78,7 +81,7 @@ public class StartGameListAdapter extends RecyclerView.Adapter {
 
         @Override
         public void onClick(View view) {
-
+            mListener.onStartGameItemClicked(mPosition);
         }
     }
 }
