@@ -24,6 +24,7 @@ public class FirebaseManager {
     public static final String PROFILE_IMAGES="profile_images";
     public static final String IS_LOADING="inLoading";
     public static final String IN_GAME="inGame";
+    public static final String IN_GAME_SCORE="inGameScore";
 
 
     public static void addUserStatusChangedListener(ChildEventListener listener, String username){

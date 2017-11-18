@@ -61,7 +61,7 @@ public class QuestionGenerator {
 
     private void getWrongAnswers(Question question,int rightAnswer){
         int i=0;
-        while (i<=4){
+        while (i<4){
 
             String wrongAnswer=getWrongAnswer(rightAnswer);
             if(question.getAnswers().get(i)!=null){
@@ -103,7 +103,7 @@ public class QuestionGenerator {
 
     private String getWrongAnswer(int rightAnswer){
         int sign= getRandomWithMax(2);
-        int interval= getRandomWithMax(2);
+        int interval= ThreadLocalRandom.current().nextInt(1, 4);
         int answer=0;
 
         switch (sign){
@@ -116,6 +116,8 @@ public class QuestionGenerator {
                 break;
             }
             case 2:{
+                if(interval==1)
+                    interval=ThreadLocalRandom.current().nextInt(2, 4);
                 answer=rightAnswer*interval;
                 break;
             }

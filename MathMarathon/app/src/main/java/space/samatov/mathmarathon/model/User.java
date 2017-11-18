@@ -19,7 +19,16 @@ public class User {
     private ArrayList<String> friendList=new ArrayList<>();
     private boolean inGame=false;
     private boolean inLoading=false;
+    private int inGameScore=0;
 
+
+    public int getInGameScore() {
+        return inGameScore;
+    }
+
+    public void setInGameScore(int inGameScore) {
+        this.inGameScore = inGameScore;
+    }
 
     public boolean isInLoading() {
         return inLoading;

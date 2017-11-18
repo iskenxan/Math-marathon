@@ -7,10 +7,16 @@ import java.util.ArrayList;
  */
 
 public class Question {
-
     String question;
     ArrayList<String> answers=new ArrayList<>();
     int rightAnswerIndex;
+
+
+    public Question() {
+        for (int i=0;i<4;i++)
+            answers.add(null);
+    }
+
 
     public String getQuestion() {
         return question;
