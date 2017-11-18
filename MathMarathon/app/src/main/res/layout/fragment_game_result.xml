@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/darkNavyColor">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:layout_weight="1">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="WINNER!"
+            android:gravity="center"
+            android:textSize="45sp"
+            android:id="@+id/GameResultTextView"
+            android:textStyle="bold"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:padding="30dp"
+        android:layout_weight="1.5">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/GameResultImageView"
+            android:src="@drawable/cup"/>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:background="#404C59"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_weight="1.5">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:layout_weight="1">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textColor="#99CE58"
+                android:id="@+id/GameResultYourScoreTextView"
+                android:text="Your score:"
+                android:layout_weight="1"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textColor="#4A90E2"
+                android:id="@+id/GameResultOpponentsScoreTextView"
+                android:textSize="16sp"
+                android:text="taalaibe's "
+                android:layout_weight="1"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:layout_weight="1">
+            <Button
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:text="CONTINUE"
+                android:textStyle="bold"
+                android:id="@+id/GameResultContinueButton"
+                android:textColor="@android:color/white"
+                android:background="@drawable/red_button_ripple_effect"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

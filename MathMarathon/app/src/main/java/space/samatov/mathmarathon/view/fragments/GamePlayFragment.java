@@ -60,6 +60,7 @@ public class GamePlayFragment extends Fragment implements ChildEventListener {
         mQuestionGenerator=new QuestionGenerator(15,100);
 
         readArgs();
+        FirebaseManager.updateUserField(Formatter.getCurrentUsername(),FirebaseManager.IN_GAME_SCORE,0);
         FirebaseManager.addUserStatusChangedListener(this,mOpponentUsername);
         startTimer();
         generateNewQuestion();
@@ -89,7 +90,7 @@ public class GamePlayFragment extends Fragment implements ChildEventListener {
 
 
     private void startTimer(){
-        mTimer=new CountDownTimer(120000,1000) {
+        mTimer=new CountDownTimer(60000,1000) {
             @Override
             public void onTick(long l) {
                 mTimerValue--;
