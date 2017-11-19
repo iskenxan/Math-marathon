@@ -20,6 +20,7 @@ import space.samatov.mathmarathon.R;
 import space.samatov.mathmarathon.model.FirebaseManager;
 import space.samatov.mathmarathon.model.User;
 import space.samatov.mathmarathon.model.interfaces.OnExtracUserListener;
+import space.samatov.mathmarathon.model.utils.Formatter;
 import space.samatov.mathmarathon.model.utils.FragmentFactory;
 
 /**
@@ -28,17 +29,17 @@ import space.samatov.mathmarathon.model.utils.FragmentFactory;
 
 public class GameResultFragment extends Fragment implements OnExtracUserListener {
 
-    //TODO:After game over contribute overrall score to user's score
+    //TODO: Allow only 25 questions. There are some bugs when users start game. For example sometimes the user who starts game first gets exception
 
     @BindView(R.id.GameResultTextView)TextView mResultTextView;
     @BindView(R.id.GameResultYourScoreTextView)TextView mYourScoreTextView;
     @BindView(R.id.GameResultOpponentsScoreTextView)TextView mOpponentScoreTextView;
     @BindView(R.id.GameResultImageView)ImageView mResultImageView;
-    @BindView(R.id.GameResultContinueButton)Button mContinueButton;
 
     private String mOpponentUsername;
     private User  mCurrentUser;
     private User mOpponentUser;
+    boolean mIsWinner=false;
 
 
 
@@ -66,13 +67,15 @@ public class GameResultFragment extends Fragment implements OnExtracUserListener
 
     @OnClick(R.id.GameResultContinueButton)
     public void onContinueButtonClicked(){
+        updateUserData();
         FragmentFactory.startMenuFragment((AppCompatActivity) getActivity());
     }
 
 
+
     @Override
     public void onUserDataExtracted(User user) {
-        if(user.getEmail()== FirebaseAuth.getInstance().getCurrentUser().getEmail())
+        if(user.getEmail().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail()))
             mCurrentUser=user;
         else
             mOpponentUser=user;
@@ -86,8 +89,10 @@ public class GameResultFragment extends Fragment implements OnExtracUserListener
             int userScore=mCurrentUser.getInGameScore();
             int opponentScore=mOpponentUser.getInGameScore();
 
-            if(userScore>opponentScore)
+            if(userScore>opponentScore){
                 onCurrentUserIsWinner();
+                mIsWinner=true;
+            }
             else if(userScore<opponentScore)
                 onOpponentWinner();
             else
@@ -110,13 +115,28 @@ public class GameResultFragment extends Fragment implements OnExtracUserListener
     }
 
     private void onTie(){
-        mResultTextView.setText("IT'S A TIE!");
-        mResultImageView.setImageResource(R.drawable.friend_requests);
+        mResultTextView.setText("ITS A TIE!");
+        mResultImageView.setImageResource(R.drawable.friend_icon);
     }
 
     private void displayUserScores(){
         mYourScoreTextView.setText("Your score: "+mCurrentUser.getInGameScore());
         mOpponentScoreTextView.setText(mOpponentUsername+"'s score:"+mOpponentUser.getInGameScore());
+    }
+
+
+    private void updateUserData(){
+        if(mIsWinner){
+            int gameScore=mCurrentUser.getInGameScore();
+            int newOverallScore=gameScore+mCurrentUser.getOverallScore();
+            mCurrentUser.setOverallScore(newOverallScore);
+            mCurrentUser.setWins(mCurrentUser.getWins()+1);
+        }
+        else
+            mCurrentUser.setLoses(mCurrentUser.getLoses()+1);
+
+        mCurrentUser.setInGame(false);
+        FirebaseManager.setUserRecord(mCurrentUser,Formatter.getCurrentUsername());
     }
 
 

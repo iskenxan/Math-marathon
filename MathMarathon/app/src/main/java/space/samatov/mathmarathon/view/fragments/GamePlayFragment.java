@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,7 +100,7 @@ public class GamePlayFragment extends Fragment implements ChildEventListener {
 
             @Override
             public void onFinish() {
-                Toast.makeText(getContext(),"Game over!",Toast.LENGTH_SHORT).show();
+                FragmentFactory.startGameResultFragment((AppCompatActivity) getActivity(),mOpponentUsername);
             }
         };
         mTimer.start();

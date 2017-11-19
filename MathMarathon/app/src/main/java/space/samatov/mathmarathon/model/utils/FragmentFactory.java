@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import space.samatov.mathmarathon.R;
 import space.samatov.mathmarathon.view.fragments.FriendRequestFragment;
 import space.samatov.mathmarathon.view.fragments.GamePlayFragment;
+import space.samatov.mathmarathon.view.fragments.GameResultFragment;
 import space.samatov.mathmarathon.view.fragments.LoadingGameFragment;
 import space.samatov.mathmarathon.view.fragments.MenuFragment;
 import space.samatov.mathmarathon.view.fragments.MyProfileFragment;
@@ -63,6 +64,13 @@ public class FragmentFactory {
 
     public static final void startGamePlayFragment(AppCompatActivity activity,String opponentUsername){
         GamePlayFragment fragment=new GamePlayFragment();
+        fragment.setArguments(addOpponentsNameToArgs(opponentUsername));
+        startMainActivityFragment(activity,fragment);
+    }
+
+
+    public static final void startGameResultFragment(AppCompatActivity activity,String opponentUsername){
+        GameResultFragment fragment=new GameResultFragment();
         fragment.setArguments(addOpponentsNameToArgs(opponentUsername));
         startMainActivityFragment(activity,fragment);
     }

@@ -64,8 +64,30 @@ public class FriendRequestFragment extends Fragment implements OnExtracUserListe
 
     @Override
     public void onUserDataExtracted(User user) {
-        mCurrentUser=user;
-        displayListOrEmptyListMessage();
+        if(user.getEmail().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())){
+            mCurrentUser=user;
+            displayListOrEmptyListMessage();
+        }
+        else
+            addCurrentUserToAcceptedUserFriendList(user);
+    }
+
+
+    private void addCurrentUserToAcceptedUserFriendList(User user){
+        user.getFriendList().add(Formatter.getCurrentUsername());
+        FirebaseManager.setUserRecord(user,Formatter.formatStringForFirebase(user.getEmail()));
+    }
+
+
+    private void displayListOrEmptyListMessage(){
+        if(mCurrentUser.getFriendRequests().size()>0){
+            mRecyclerContainer.setVisibility(View.VISIBLE);
+            setupRecyclerView(mCurrentUser);
+        }
+        else{
+            mNorequestsContainer.setVisibility(View.VISIBLE);
+            mRecyclerContainer.setVisibility(View.INVISIBLE);
+        }
     }
 
 
@@ -89,6 +111,7 @@ public class FriendRequestFragment extends Fragment implements OnExtracUserListe
         if(accepted){
             String friendRequest=mCurrentUser.getFriendRequests().get(position);
             mCurrentUser.getFriendList().add(friendRequest);
+            FirebaseManager.extractUserData(this,friendRequest);
         }
         mCurrentUser.getFriendRequests().remove(position);
     }
@@ -107,15 +130,6 @@ public class FriendRequestFragment extends Fragment implements OnExtracUserListe
 
 
 
-    private void displayListOrEmptyListMessage(){
-        if(mCurrentUser.getFriendRequests().size()>0){
-            mRecyclerContainer.setVisibility(View.VISIBLE);
-            setupRecyclerView(mCurrentUser);
-        }
-        else{
-            mNorequestsContainer.setVisibility(View.VISIBLE);
-            mRecyclerContainer.setVisibility(View.INVISIBLE);
-        }
-    }
+
 
 }
