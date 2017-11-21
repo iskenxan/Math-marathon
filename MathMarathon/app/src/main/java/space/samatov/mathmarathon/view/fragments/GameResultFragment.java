@@ -30,7 +30,7 @@ import space.samatov.mathmarathon.model.utils.FragmentFactory;
 public class GameResultFragment extends Fragment implements OnExtracUserListener {
 
     //TODO: Allow only 25 questions. There are some bugs when users start game. For example sometimes the user who starts game first gets exception
-
+    //TODO: Sometimes one user enters the game and the other user is still loading 
     @BindView(R.id.GameResultTextView)TextView mResultTextView;
     @BindView(R.id.GameResultYourScoreTextView)TextView mYourScoreTextView;
     @BindView(R.id.GameResultOpponentsScoreTextView)TextView mOpponentScoreTextView;
@@ -48,6 +48,7 @@ public class GameResultFragment extends Fragment implements OnExtracUserListener
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.fragment_game_result,container,false);
         ButterKnife.bind(this,view);
+        FirebaseManager.updateUserField(Formatter.getCurrentUsername(),FirebaseManager.IN_GAME,false);
         readArgs();
         getUserData();
 

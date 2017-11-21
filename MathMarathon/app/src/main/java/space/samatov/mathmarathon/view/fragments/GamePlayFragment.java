@@ -100,12 +100,18 @@ public class GamePlayFragment extends Fragment implements ChildEventListener {
 
             @Override
             public void onFinish() {
-                FragmentFactory.startGameResultFragment((AppCompatActivity) getActivity(),mOpponentUsername);
+               onGameFinished();
             }
         };
         mTimer.start();
         mIsPlaying =true;
         FirebaseManager.updateUserField(Formatter.getCurrentUsername(),FirebaseManager.IN_GAME,true);
+    }
+
+
+    private void onGameFinished(){
+        FirebaseManager.removeUserStatusChangedListener(this,mOpponentUsername);
+        FragmentFactory.startGameResultFragment((AppCompatActivity) getActivity(),mOpponentUsername);
     }
 
 
@@ -153,11 +159,13 @@ public class GamePlayFragment extends Fragment implements ChildEventListener {
 
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+        checkIfOpponentInGame(dataSnapshot);
         updateOpponentScore(dataSnapshot);
     }
 
     @Override
     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+        checkIfOpponentInGame(dataSnapshot);
         updateOpponentScore(dataSnapshot);
     }
 
@@ -183,5 +191,25 @@ public class GamePlayFragment extends Fragment implements ChildEventListener {
             mOpponentScore=opponentScore;
             mOpponentScoreTextView.setText(mOpponentUsername+"'s score: "+opponentScore);
         }
+    }
+
+
+
+    private void checkIfOpponentInGame(DataSnapshot dataSnapshot){
+        if(dataSnapshot.getKey().equals(FirebaseManager.IN_GAME)){
+            boolean inGame=dataSnapshot.getValue(Boolean.class);
+            if(!inGame){
+                onGameFinished();
+            }
+        }
+    }
+
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        FirebaseManager.updateUserField(Formatter.getCurrentUsername(),FirebaseManager.IN_GAME,false);
+        FirebaseManager.updateUserField(Formatter.getCurrentUsername(),FirebaseManager.IN_GAME_SCORE,0);
     }
 }

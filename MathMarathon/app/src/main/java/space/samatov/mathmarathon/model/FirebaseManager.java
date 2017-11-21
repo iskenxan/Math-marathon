@@ -27,6 +27,12 @@ public class FirebaseManager {
     public static final String IN_GAME_SCORE="inGameScore";
 
 
+    public static void removeUserStatusChangedListener(ChildEventListener listener,String username){
+        DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference();
+        databaseReference.child(USERS).child(username).removeEventListener(listener);
+    }
+
+
     public static void addUserStatusChangedListener(ChildEventListener listener, String username){
         DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference();
         databaseReference.child(USERS).child(username).addChildEventListener(listener);

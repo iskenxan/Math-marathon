@@ -36,6 +36,7 @@ public class LoadingGameFragment extends Fragment implements  ChildEventListener
     @BindView(R.id.LoadingFragmentImageView)ImageView mLoadingImageView;
     String mOpponentUsername;
     String mCurrentUsername;
+    AppCompatActivity mActivity;
 
 
     @Nullable
@@ -43,6 +44,7 @@ public class LoadingGameFragment extends Fragment implements  ChildEventListener
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.fragment_loading_game,container,false);
         ButterKnife.bind(this,view);
+        mActivity= (AppCompatActivity) getActivity();
 
         AnimationFactory.startRotatingAnimation(mLoadingImageView);
         readArgs();
@@ -64,7 +66,7 @@ public class LoadingGameFragment extends Fragment implements  ChildEventListener
 
     @OnClick(R.id.LoadingFragmentCancelButton)
     public void onCancelButtonClicked(){
-           FirebaseManager.updateUserField(mCurrentUsername,FirebaseManager.IS_LOADING,false);
+        FirebaseManager.updateUserField(mCurrentUsername,FirebaseManager.IS_LOADING,false);
         FragmentFactory.startMenuFragment((AppCompatActivity) getActivity());
     }
 
@@ -96,8 +98,8 @@ public class LoadingGameFragment extends Fragment implements  ChildEventListener
 
     private void startGame(){
         markUserAsInGame(mCurrentUsername);
-        markUserAsInGame(mOpponentUsername);
-        FragmentFactory.startGamePlayFragment((AppCompatActivity) getActivity(),mOpponentUsername);
+        FirebaseManager.removeUserStatusChangedListener(this,mOpponentUsername);
+        FragmentFactory.startGamePlayFragment(mActivity,mOpponentUsername);
     }
 
 
@@ -121,5 +123,12 @@ public class LoadingGameFragment extends Fragment implements  ChildEventListener
     @Override
     public void onCancelled(DatabaseError databaseError) {
 
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        FirebaseManager.removeUserStatusChangedListener(this,mOpponentUsername);
     }
 }
