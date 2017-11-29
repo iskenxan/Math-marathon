@@ -11,14 +11,12 @@ import space.samatov.mathmarathon.model.utils.Formatter;
 
 public class QuestionGenerator {
 
-    private Random mRandom;
     int mMax;
     int mMin;
 
 
 
     public QuestionGenerator(int min,int max){
-        mRandom=new Random();
         mMin=min;
         mMax=max;
     }
@@ -37,9 +35,10 @@ public class QuestionGenerator {
 
 
     private int  getQuestionsAndRightAnswer(Question question){
-        int firstNum= generateRandomNumberWithinRange();
-        int secondNum= generateRandomNumberWithinRange();
-        int sign= getRandomWithMax(2);  //0=plus,1=minus,2=multiply
+        int sign= getRandomWithMax(2);//0=plus,1=minus,2=multiply
+        int firstNum= generateRandomNumberWithinRange(sign);
+        int secondNum= generateRandomNumberWithinRange(sign);
+
         int rightAnswer=getRightAnswer(firstNum,secondNum,sign);
 
         String signStr=Formatter.convertSignToStr(sign);
@@ -75,8 +74,11 @@ public class QuestionGenerator {
     }
 
 
-    private int generateRandomNumberWithinRange(){
-        return ThreadLocalRandom.current().nextInt(mMin, mMax + 1);
+    private int generateRandomNumberWithinRange(int sign){
+        if(sign==2)
+            return ThreadLocalRandom.current().nextInt(2, 15 + 1);
+        else
+            return ThreadLocalRandom.current().nextInt(mMin, mMax + 1);
     }
 
 

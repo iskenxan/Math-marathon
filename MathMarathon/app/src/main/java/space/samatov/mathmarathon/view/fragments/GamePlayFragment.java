@@ -1,5 +1,6 @@
 package space.samatov.mathmarathon.view.fragments;
 
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
@@ -9,8 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -42,16 +43,23 @@ public class GamePlayFragment extends Fragment implements ChildEventListener {
     @BindView(R.id.secondAnswerButton)Button mSecondAnswerButton;
     @BindView(R.id.thirdAnswerButton)Button mThirdAnswerButton;
     @BindView(R.id.fourthAnswerButton)Button mFourthAnswerButton;
+    @BindView(R.id.OpponentFigureImageView)ImageView mOpponentImageView;
+    @BindView(R.id.UserFigureImageView)ImageView mUserImageView;
+    @BindView(R.id.GamePlayQuitTextView)TextView mQuitTextView;
 
+
+    AppCompatActivity mActivity;
     CountDownTimer mTimer;
     QuestionGenerator mQuestionGenerator;
     Question mCurrentQuestion;
     String mOpponentUsername;
-    boolean mIsPlaying =false;
+    boolean mGameFinished =false;
+    boolean mOpponentQuit=false;
     int mTimerValue=60;
 
     int mUserScore=0;
     int mOpponentScore=0;
+    int mQuestionCounter=0;
 
     @Nullable
     @Override
@@ -73,19 +81,14 @@ public class GamePlayFragment extends Fragment implements ChildEventListener {
 
 
     private void readArgs(){
+        mActivity= (AppCompatActivity) getActivity();
         mOpponentUsername=getArguments().getString(FragmentFactory.OPPONENT_NAME);
-    }
-
-
-
-    private void generateNewQuestion(){
-        Question question=mQuestionGenerator.generateRandomQuestion();
-        mCurrentQuestion =question;
-        mQuestionTextView.setText(mCurrentQuestion.getQuestion());
-        mFirstAnswerButton.setText(mCurrentQuestion.getAnswers().get(0));
-        mSecondAnswerButton.setText(mCurrentQuestion.getAnswers().get(1));
-        mThirdAnswerButton.setText(mCurrentQuestion.getAnswers().get(2));
-        mFourthAnswerButton.setText(mCurrentQuestion.getAnswers().get(3));
+        mOpponentImageView.setBackgroundResource(R.drawable.running_man_2_anim);
+        mUserImageView.setBackgroundResource(R.drawable.runinng_man_1_anim);
+        AnimationDrawable opponentAnimation = (AnimationDrawable) mOpponentImageView.getBackground();
+        opponentAnimation.start();
+        AnimationDrawable userAnimation = (AnimationDrawable) mUserImageView.getBackground();
+        userAnimation.start();
     }
 
 
@@ -100,20 +103,32 @@ public class GamePlayFragment extends Fragment implements ChildEventListener {
 
             @Override
             public void onFinish() {
-               onGameFinished();
+                mGameFinished =true;
+                onGameFinished();
             }
         };
         mTimer.start();
-        mIsPlaying =true;
+        mGameFinished =true;
         FirebaseManager.updateUserField(Formatter.getCurrentUsername(),FirebaseManager.IN_GAME,true);
+    }
+
+
+    @OnClick(R.id.GamePlayQuitTextView)
+    public void onQuitClicked(){
+        onGameQuit();
+    }
+
+
+    private void onGameQuit(){
+        FirebaseManager.updateUserField(Formatter.getCurrentUsername(),FirebaseManager.IS_ABANDONED_GAME,true);
+        onGameFinished();
     }
 
 
     private void onGameFinished(){
         FirebaseManager.removeUserStatusChangedListener(this,mOpponentUsername);
-        FragmentFactory.startGameResultFragment((AppCompatActivity) getActivity(),mOpponentUsername);
+        FragmentFactory.startGameResultFragment(mActivity,mOpponentUsername);
     }
-
 
 
     @OnClick(R.id.firstAnswerButton)
@@ -140,13 +155,51 @@ public class GamePlayFragment extends Fragment implements ChildEventListener {
     private void checkAnswerAndAnimateButton(Button button,int buttonIndex){
         if(mCurrentQuestion.getRightAnswerIndex()==buttonIndex){
             addScoreToUser();
+
+            AnimationFactory.startMoveRunnerAnimation(mUserImageView);
             AnimationFactory.startRightAnswerButtonAnimation(button);
         }
         else
             AnimationFactory.startWrongAnswerButtonAnimation(button);
 
-        generateNewQuestion();
+        generateQuestionOrDisplayWaitMessage();
     }
+
+
+
+    private void generateQuestionOrDisplayWaitMessage(){
+        mQuestionCounter++;
+        if(mQuestionCounter<60)
+            generateNewQuestion();
+        else
+            displayMaxQuestionsMessage();
+    }
+
+
+    private void generateNewQuestion(){
+        Question question=mQuestionGenerator.generateRandomQuestion();
+        mCurrentQuestion =question;
+        mQuestionTextView.setText(mCurrentQuestion.getQuestion());
+        mFirstAnswerButton.setText(mCurrentQuestion.getAnswers().get(0));
+        mSecondAnswerButton.setText(mCurrentQuestion.getAnswers().get(1));
+        mThirdAnswerButton.setText(mCurrentQuestion.getAnswers().get(2));
+        mFourthAnswerButton.setText(mCurrentQuestion.getAnswers().get(3));
+    }
+
+
+    private void displayMaxQuestionsMessage(){
+        mQuestionTextView.setTextSize(18);
+        mQuestionTextView.setText("You have exceeded the maximum amount of questions.Please wait.");
+        mFirstAnswerButton.setText("");
+        mSecondAnswerButton.setText("");
+        mThirdAnswerButton.setText("");
+        mFourthAnswerButton.setText("");
+        mFirstAnswerButton.setEnabled(false);
+        mSecondAnswerButton.setEnabled(false);
+        mThirdAnswerButton.setEnabled(false);
+        mFourthAnswerButton.setEnabled(false);
+    }
+
 
 
     private void addScoreToUser(){
@@ -188,6 +241,7 @@ public class GamePlayFragment extends Fragment implements ChildEventListener {
     private void updateOpponentScore(DataSnapshot dataSnapshot){
         if(dataSnapshot.getKey().equals(FirebaseManager.IN_GAME_SCORE)){
             int opponentScore=dataSnapshot.getValue(Integer.class);
+            animateOpponentRunner(opponentScore);
             mOpponentScore=opponentScore;
             mOpponentScoreTextView.setText(mOpponentUsername+"'s score: "+opponentScore);
         }
@@ -195,21 +249,35 @@ public class GamePlayFragment extends Fragment implements ChildEventListener {
 
 
 
+    private void animateOpponentRunner(int newScore){
+        int difference=newScore-mOpponentScore;
+        while (difference>0){
+            AnimationFactory.startMoveRunnerAnimation(mOpponentImageView);
+            difference--;
+        }
+    }
+
+
+
+
     private void checkIfOpponentInGame(DataSnapshot dataSnapshot){
         if(dataSnapshot.getKey().equals(FirebaseManager.IN_GAME)){
             boolean inGame=dataSnapshot.getValue(Boolean.class);
             if(!inGame){
+                mOpponentQuit=true;
                 onGameFinished();
             }
         }
     }
 
 
-
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        FirebaseManager.updateUserField(Formatter.getCurrentUsername(),FirebaseManager.IN_GAME,false);
-        FirebaseManager.updateUserField(Formatter.getCurrentUsername(),FirebaseManager.IN_GAME_SCORE,0);
+    public void onStop() {
+        super.onStop();
+        if(mOpponentQuit||mGameFinished)
+            onGameFinished();
+        else
+            onGameQuit();
     }
+
 }

@@ -98,6 +98,7 @@ public class LoadingGameFragment extends Fragment implements  ChildEventListener
 
     private void startGame(){
         markUserAsInGame(mCurrentUsername);
+        markUserAsInGame(mOpponentUsername);
         FirebaseManager.removeUserStatusChangedListener(this,mOpponentUsername);
         FragmentFactory.startGamePlayFragment(mActivity,mOpponentUsername);
     }
@@ -107,6 +108,8 @@ public class LoadingGameFragment extends Fragment implements  ChildEventListener
         FirebaseManager.updateUserField(username,FirebaseManager.IS_LOADING,false);
         FirebaseManager.updateUserField(username,FirebaseManager.IN_GAME,true);
     }
+
+
 
 
 

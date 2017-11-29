@@ -20,7 +20,16 @@ public class User {
     private boolean inGame=false;
     private boolean inLoading=false;
     private int inGameScore=0;
+    private boolean abandonedGame=false;
 
+
+    public boolean isAbandonedGame() {
+        return abandonedGame;
+    }
+
+    public void setAbandonedGame(boolean isAbandonedGame) {
+        this.abandonedGame = isAbandonedGame;
+    }
 
     public int getInGameScore() {
         return inGameScore;

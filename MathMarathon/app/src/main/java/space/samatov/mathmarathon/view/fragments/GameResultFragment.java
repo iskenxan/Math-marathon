@@ -29,14 +29,14 @@ import space.samatov.mathmarathon.model.utils.FragmentFactory;
 
 public class GameResultFragment extends Fragment implements OnExtracUserListener {
 
-    //TODO: Allow only 25 questions. There are some bugs when users start game. For example sometimes the user who starts game first gets exception
-    //TODO: Sometimes one user enters the game and the other user is still loading 
+
     @BindView(R.id.GameResultTextView)TextView mResultTextView;
     @BindView(R.id.GameResultYourScoreTextView)TextView mYourScoreTextView;
     @BindView(R.id.GameResultOpponentsScoreTextView)TextView mOpponentScoreTextView;
     @BindView(R.id.GameResultImageView)ImageView mResultImageView;
 
     private String mOpponentUsername;
+
     private User  mCurrentUser;
     private User mOpponentUser;
     boolean mIsWinner=false;
@@ -61,10 +61,12 @@ public class GameResultFragment extends Fragment implements OnExtracUserListener
         mOpponentUsername=getArguments().getString(FragmentFactory.OPPONENT_NAME);
     }
 
+
     private void getUserData(){
         FirebaseManager.extracCurrentUserData(this);
         FirebaseManager.extractUserData(this,mOpponentUsername);
     }
+
 
     @OnClick(R.id.GameResultContinueButton)
     public void onContinueButtonClicked(){
@@ -90,11 +92,11 @@ public class GameResultFragment extends Fragment implements OnExtracUserListener
             int userScore=mCurrentUser.getInGameScore();
             int opponentScore=mOpponentUser.getInGameScore();
 
-            if(userScore>opponentScore){
+            if(userScore>opponentScore||mOpponentUser.isAbandonedGame()){
                 onCurrentUserIsWinner();
                 mIsWinner=true;
             }
-            else if(userScore<opponentScore)
+            else if(mCurrentUser.isAbandonedGame()||userScore<opponentScore)
                 onOpponentWinner();
             else
                 onTie();
@@ -137,6 +139,7 @@ public class GameResultFragment extends Fragment implements OnExtracUserListener
             mCurrentUser.setLoses(mCurrentUser.getLoses()+1);
 
         mCurrentUser.setInGame(false);
+        mCurrentUser.setAbandonedGame(false);
         FirebaseManager.setUserRecord(mCurrentUser,Formatter.getCurrentUsername());
     }
 

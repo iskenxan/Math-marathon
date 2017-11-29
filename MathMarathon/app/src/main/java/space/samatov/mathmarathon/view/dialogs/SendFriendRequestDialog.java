@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -64,6 +65,7 @@ public class SendFriendRequestDialog extends DialogFragment implements View.OnCl
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         bindViews(view);
+        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         setListeners();
     }
 
@@ -86,7 +88,7 @@ public class SendFriendRequestDialog extends DialogFragment implements View.OnCl
     @Override
     public void onResume() {
         super.onResume();
-        setSizeToMatchParent();
+        //setSizeToMatchParent();
     }
 
     private void setSizeToMatchParent(){

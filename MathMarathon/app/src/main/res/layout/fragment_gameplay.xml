@@ -5,10 +5,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/darkNavyColor">
-<ImageView
-    android:layout_width="match_parent"
-    android:layout_height="150dp"
-    android:src="@drawable/runnning_track"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:src="@drawable/runnning_track"/>
+        <ImageView
+            android:layout_width="50dp"
+            android:id="@+id/OpponentFigureImageView"
+            android:layout_height="70dp" />
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="-20dp"
+            android:layout_below="@id/OpponentFigureImageView"
+            android:id="@+id/UserFigureImageView" />
+    </RelativeLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -32,7 +47,7 @@
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:id="@+id/YourScoreTextView"
-                android:textColor="#99CE58"
+                android:textColor="@color/lightRedColor"
                 android:text="Your score: 0"/>
             <TextView
                 android:layout_width="wrap_content"
@@ -71,8 +86,10 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="10+5=?"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
             android:id="@+id/QuestionTextView"
-            android:textSize="65sp"
+            android:textSize="50sp"
             android:textStyle="bold"
             android:textColor="@android:color/white"/>
     </LinearLayout>
@@ -144,5 +161,20 @@
                     android:background="@drawable/answer_button_idle"/>
             </LinearLayout>
         </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="40dp">
+        <TextView
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:text="Quit"
+            android:gravity="center_vertical"
+            android:textSize="15sp"
+            android:id="@+id/GamePlayQuitTextView"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"/>
     </LinearLayout>
 </LinearLayout>

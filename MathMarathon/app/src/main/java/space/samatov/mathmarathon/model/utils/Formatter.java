@@ -18,6 +18,16 @@ import space.samatov.mathmarathon.model.UserReference;
 public class Formatter {
 
 
+    public static int[] getScreenSize(Context context){
+        int width = context.getResources().getDisplayMetrics().widthPixels;
+        int height = context.getResources().getDisplayMetrics().heightPixels;
+
+        int screenSize[]=new int[2];
+        screenSize[0]=width;
+        screenSize[1]=height;
+
+        return screenSize;
+    }
 
     public static String convertSignToStr(int sign){
         String signStr="";
